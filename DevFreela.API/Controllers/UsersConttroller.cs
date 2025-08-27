@@ -1,10 +1,10 @@
-﻿using DevFreela.API.Entities;
-using DevFreela.API.Models;
-using DevFreela.API.Persistence;
+﻿using DevFreela.Application.Models;
+using DevFreela.Infrastructure.Persistence;
+using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevFreela.API.Controllers
+namespace DevFreela.Application.Controllers
 {
     [ApiController]
     [Route("api/users")]
@@ -35,7 +35,7 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public IActionResult Post(CreateUserInputModel model)
         {
-            var user = new Entities.User(model.FullName, model.Email, model.BirthDate);
+            var user = new DevFreela.Core.Entities.User(model.FullName, model.Email, model.BirthDate);
             _context.Add(user);
             _context.SaveChanges();
 
@@ -45,7 +45,7 @@ namespace DevFreela.API.Controllers
         [HttpPost("{id}/skills")]
         public IActionResult PosttSkills(int id, UserSkillsInputModel model)
         {
-            var userSkills = model.SkillsId.Select(s=> new UserSkill(id, s)).ToList();
+            var userSkills = model.SkillsId.Select(s => new UserSkill(id, s)).ToList();
 
             _context.AddRange(userSkills);
             _context.SaveChanges();

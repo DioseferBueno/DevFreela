@@ -1,7 +1,6 @@
-using DevFreela.API.ExceptionHandler;
-using DevFreela.API.Models;
-using DevFreela.API.Persistence;
-using DevFreela.API.Services;
+using DevFreela.Application.ExceptionHandler;
+using DevFreela.Application.Models;
+using DevFreela.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<FreeLanceTotalCostConfig>(builder.Configuration.GetSection("FreelanceTotalCostConfig") // pegando a sessão do appsettings
     );
-
-builder.Services.AddScoped<IConfigService, ConfigService>();
-
 
 var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
 

@@ -1,12 +1,11 @@
-﻿using DevFreela.API.Enums;
-using DevFreela.API.Models;
-using DevFreela.API.Persistence;
-using DevFreela.API.Services;
+﻿using DevFreela.Core.Enums;
+using DevFreela.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using DevFreela.Infrastructure.Persistence;
 
-namespace DevFreela.API.Controllers
+namespace DevFreela.Application.Controllers
 {
     [ApiController]
     [Route("api/projects")]

@@ -1,7 +1,7 @@
-﻿using DevFreela.API.Entities;
+﻿using DevFreela.Core.Entities;
 using System.Security.Principal;
 
-namespace DevFreela.API.Enums
+namespace DevFreela.Core.Enums
 {
     public class ProjectComment : BaseEntity
     {
