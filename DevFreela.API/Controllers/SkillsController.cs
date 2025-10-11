@@ -27,10 +27,7 @@ namespace DevFreela.Application.Controllers
         [HttpPost]
         public IActionResult Post(CreateSkillInputModel model) 
         {
-            var skill = new Skill(model.Description);
             
-            _context.Skills.Add(skill);
-            _context.SaveChanges();
             
             return NoContent();
 

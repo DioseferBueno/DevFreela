@@ -8,7 +8,7 @@ namespace DevFreela.Infrastructure.Persistence
     {
         public DevFreelaDbContext(DbContextOptions<DevFreelaDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Project> Projects { get; set; }
@@ -19,7 +19,8 @@ namespace DevFreela.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Skill>(e => { 
+            builder.Entity<Skill>(e =>
+            {
                 e.HasKey(e => e.Id);
             });
 
@@ -30,15 +31,19 @@ namespace DevFreela.Infrastructure.Persistence
                 .WithMany(u => u.UserSkills)
                 .HasForeignKey(u => u.IdUSkill)
                 .OnDelete(DeleteBehavior.Restrict);
-                });
+            });
 
             builder.Entity<ProjectComment>(e =>
             {
                 e.HasKey(p => p.Id);
                 e.HasOne(p => p.Project)
-                    .WithMany(p=> p.Comments)
-                    .HasForeignKey(p=> p.IdProject)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(p => p.IdProject)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(p => p.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(p => p.IdUser);
             });
 
             builder.Entity<User>(e =>
@@ -53,7 +58,7 @@ namespace DevFreela.Infrastructure.Persistence
             {
                 e.HasKey(p => p.Id);
                 e.HasOne(p => p.Freelancer)
-                .WithMany(f=> f.FreelanceProjects)
+                .WithMany(f => f.FreelanceProjects)
                 .HasForeignKey(p => p.IdFreelancer)
                 .OnDelete(DeleteBehavior.Restrict);
 

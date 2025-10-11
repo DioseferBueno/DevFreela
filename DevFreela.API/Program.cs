@@ -1,3 +1,4 @@
+using DevFreela.Application;
 using DevFreela.Application.ExceptionHandler;
 using DevFreela.Application.Models;
 using DevFreela.Infrastructure.Persistence;
@@ -13,6 +14,8 @@ builder.Services.Configure<FreeLanceTotalCostConfig>(builder.Configuration.GetSe
 var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
 
 builder.Services.AddDbContext<DevFreelaDbContext>(o => o.UseSqlServer(connectionString));
+
+builder.Services.AddApplicaiton();
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
