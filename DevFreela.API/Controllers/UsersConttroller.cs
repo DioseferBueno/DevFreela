@@ -30,7 +30,7 @@ namespace DevFreela.Application.Controllers
             }
 
             var model = UserViewModel.FromEntity(user);
-            return Ok(user);
+            return Ok(model);
         }
         [HttpPost]
         public IActionResult Post(CreateUserInputModel model)
