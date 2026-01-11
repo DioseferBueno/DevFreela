@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DevFreela.Infrastructure.Persistence;
-using DevFreela.Application.Services;
 using MediatR;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Commands.Project.UpdateProject;
@@ -17,12 +15,10 @@ namespace DevFreela.Application.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
-        private readonly IProjectService _projectService;
         private readonly IMediator _mediator;
 
-        public ProjectsController(DevFreelaDbContext context, IProjectService projectService, IMediator mediator)
+        public ProjectsController(IMediator mediator)
         {
-            _projectService = projectService;
             _mediator = mediator;
         }
 
