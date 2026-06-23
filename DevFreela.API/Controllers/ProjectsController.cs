@@ -8,6 +8,7 @@ using DevFreela.Application.Commands.Project.StartProject;
 using DevFreela.Application.Commands.Project.CompleteProject;
 using DevFreela.Application.Commands.Project.InsertProject;
 using DevFreela.Application.Queries.Project.GetProjectById;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevFreela.Application.Controllers
 {
@@ -30,6 +31,7 @@ namespace DevFreela.Application.Controllers
         /// <param name="size"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "freelancer, client")]
         public async Task<IActionResult> GetAll(string search = "", int page = 0, int size = 3)
         {
             var query = new GetAllProjectsQuery();
@@ -50,6 +52,7 @@ namespace DevFreela.Application.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> Post(InsertProjectCommand command)
         {
             var result = await _mediator.Send(command);

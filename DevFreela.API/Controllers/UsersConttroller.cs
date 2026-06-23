@@ -3,17 +3,22 @@ using DevFreela.Infrastructure.Persistence;
 using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using DevFreela.Infrastructure.Auth;
 
 namespace DevFreela.Application.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/users")]
     public class UsersConttroller : ControllerBase
     {
         private readonly DevFreelaDbContext _context;
-        public UsersConttroller(DevFreelaDbContext context)
+        private readonly IAuthService _authorizationService;
+        public UsersConttroller(DevFreelaDbContext context, IAuthService authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("{id}")]
@@ -33,9 +38,11 @@ namespace DevFreela.Application.Controllers
             return Ok(model);
         }
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Post(CreateUserInputModel model)
         {
-            var user = new DevFreela.Core.Entities.User(model.FullName, model.Email, model.BirthDate);
+            var hash = _authorizationService.ComputerHash(model.Password);
+            var user = new DevFreela.Core.Entities.User(model.FullName, model.Email, model.BirthDate, hash, model.Role);
             _context.Add(user);
             _context.SaveChanges();
 
@@ -61,6 +68,29 @@ namespace DevFreela.Application.Controllers
             // Processar a imagem
 
             return Ok(description);
+        }
+
+        [HttpPut("login")]
+        [AllowAnonymous]
+        public IActionResult Login(LoginInputModel model)
+        {
+            var hash = _authorizationService.ComputerHash(model.Password);
+
+            var user = _context.Users.SingleOrDefault(u => u.Email == model.Email && u.Password == hash);
+
+            if (user is null)
+            {
+                var error = ResultViewModel<LoginViewModel?>.Error("Login ou senha incorreto.");
+                return BadRequest(error);
+            }
+
+            var token = _authorizationService.GenerateToken(user.Email, user.Role);
+
+            var viewModel = new LoginViewModel(token);
+
+            var result = ResultViewModel<LoginViewModel>.Success(viewModel);
+
+            return Ok(result);
         }
     }
 }

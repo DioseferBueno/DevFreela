@@ -18,9 +18,12 @@ namespace DevFreela.Application.Queries.Project.GetAllProjects
         {
             var projects = await _repository.GetAllAsync();
 
-            var model = projects.Select(ProjectItemViewModel.FromEntity).ToList();
+            var filtered = projects
+                .Where(p => string.IsNullOrEmpty(request.Search) || p.Title.Contains(request.Search, StringComparison.OrdinalIgnoreCase))
+                .Select(ProjectItemViewModel.FromEntity)
+                .ToList();
 
-            return ResultViewModel<List<ProjectItemViewModel>>.Success(model);
+            return ResultViewModel<List<ProjectItemViewModel>>.Success(filtered);
         }
     }
 }
